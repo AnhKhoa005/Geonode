@@ -6,7 +6,7 @@
 
 ## Tính năng
 
-- **Trang chủ**: hero "Welcome to GeoNode", thống kê, lối tắt Tải lên Layer / Tạo Bản đồ mới.
+- **Trang chủ (phong cách Arsha)**: header cố định + menu mobile, hero xanh navy kèm ảnh minh họa và ô tìm kiếm, thống kê, 6 tính năng dạng Services, Layers nổi bật, khối CTA nền ảnh, footer Arsha. Khung bản đồ MapStore gốc giữ nguyên bên dưới.
 - **Trang Layers** (`/datasets`): tìm kiếm, lọc Vector/Raster, sắp xếp (mới nhất, A-Z, phổ biến), badge loại layer, mở viewer chi tiết.
 - **Trang Bản đồ** (`/maps`): lưới card thumbnail, số layer, ngày tạo, lượt xem, tự tạo thumbnail từ WMS nếu thiếu.
 - **Trang Tài liệu** (`/documents`): icon theo định dạng file (PDF, Word, Excel...), badge đuôi file.
@@ -19,16 +19,17 @@
 webgis-custom/
 ├── templates/
 │   └── geonode-mapstore-client/
-│       ├── index.html          # Trang chủ
+│       ├── index.html          # Trang chủ (Arsha)
 │       ├── snippets/
 │       │   └── chatbox.html    # Widget chat trực tuyến
 │       └── pages/
 │           ├── datasets.html   # Trang Layers
 │           ├── maps.html       # Trang Bản đồ
 │           └── documents.html  # Trang Tài liệu
+├── arsha/                      # Assets Arsha (CSS scoped, JS, icons, ảnh) -> /static/arsha/
 ├── geonode/
 │   └── chat/                   # Django app "chat" (backend cho chatbox)
-├── docker-compose.override.yml # Mount giao diện + chat app vào container
+├── docker-compose.override.yml # Mount giao diện + chat app + assets vào container
 └── README.md
 ```
 
@@ -40,6 +41,7 @@ Yêu cầu: đã có source GeoNode (bản 4.x) + Docker Desktop.
    ```powershell
    Copy-Item -Recurse .\templates\ <duong-dan-geonode>\templates\
    Copy-Item -Recurse .\geonode\chat\ <duong-dan-geonode>\geonode\chat\
+   Copy-Item -Recurse .\arsha\ <duong-dan-geonode>\arsha\
    Copy-Item .\docker-compose.override.yml <duong-dan-geonode>\docker-compose.override.yml
    ```
 2. Đăng ký app `chat` vào backend (chỉ cần 2 dòng):
@@ -66,3 +68,4 @@ Yêu cầu: đã có source GeoNode (bản 4.x) + Docker Desktop.
 - Chatbox dùng API riêng: `GET /api/v2/chat/messages/` (đọc tin mới nhất, mặc định 50) và `POST /api/v2/chat/send/` (gửi tin nhắn).
 - Dữ liệu mẫu (bản đồ, tài liệu demo) nằm trong database Docker, không đi kèm repo này.
 - Phát triển trên nền GeoNode (GPL-3.0).
+- Giao diện trang chủ dựa trên template **Arsha** của BootstrapMade (giấy phép free, giữ credit trong footer). File CSS gốc đã được scope dưới `.gn-arsha` để không ảnh hưởng viewer MapStore; chỉ giữ lại CSS/JS/ảnh cần thiết (bỏ swiper, glightbox, isotope...).
