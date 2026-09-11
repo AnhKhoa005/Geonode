@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -265,5 +265,6 @@
     .then(function(d){ all = d.documents||[]; render(); })
     .catch(function(){ grid.innerHTML='<div class="col-12 text-center py-5 text-secondary"><i class="fa fa-exclamation-triangle fa-3x d-block mb-2" style="opacity:.4"></i>Không thể tải dữ liệu.</div>'; });
 </script>
+{% include '../snippets/chatbox.html' %}
 </body>
 </html>

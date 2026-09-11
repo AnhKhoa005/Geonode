@@ -3,13 +3,17 @@
 services:
   django:
     volumes:
+      - ./geonode/chat:/usr/src/geonode/geonode/chat
       - ./templates/geonode-mapstore-client/index.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/index.html
       - ./templates/geonode-mapstore-client/pages/datasets.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/datasets.html
       - ./templates/geonode-mapstore-client/pages/maps.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/maps.html
       - ./templates/geonode-mapstore-client/pages/documents.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/documents.html
+      - ./templates/geonode-mapstore-client/snippets/chatbox.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/chatbox.html
   celery:
     volumes:
+      - ./geonode/chat:/usr/src/geonode/geonode/chat
       - ./templates/geonode-mapstore-client/index.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/index.html
       - ./templates/geonode-mapstore-client/pages/datasets.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/datasets.html
       - ./templates/geonode-mapstore-client/pages/maps.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/maps.html
       - ./templates/geonode-mapstore-client/pages/documents.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/pages/documents.html
+      - ./templates/geonode-mapstore-client/snippets/chatbox.html:/usr/src/venv/lib/python3.12/site-packages/geonode_mapstore_client/templates/geonode-mapstore-client/snippets/chatbox.html

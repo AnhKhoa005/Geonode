@@ -10,6 +10,7 @@
 - **Trang Layers** (`/datasets`): tìm kiếm, lọc Vector/Raster, sắp xếp (mới nhất, A-Z, phổ biến), badge loại layer, mở viewer chi tiết.
 - **Trang Bản đồ** (`/maps`): lưới card thumbnail, số layer, ngày tạo, lượt xem, tự tạo thumbnail từ WMS nếu thiếu.
 - **Trang Tài liệu** (`/documents`): icon theo định dạng file (PDF, Word, Excel...), badge đuôi file.
+- **Chat trực tuyến** (floating widget góc phải dưới): hộp chat lưu vào database, poll tin nhắn mới mỗi 5 giây (biến CSS tùy chỉnh `.gn-chat-*`), nhận diện tên người đăng nhập, khách lưu tên "Khách".
 - Style thống nhất: tông navy + xanh dương, font Be Vietnam Pro + Inter, hỗ trợ tiếng Việt đầy đủ.
 
 ## Cấu trúc
@@ -19,11 +20,15 @@ webgis-custom/
 ├── templates/
 │   └── geonode-mapstore-client/
 │       ├── index.html          # Trang chủ
+│       ├── snippets/
+│       │   └── chatbox.html    # Widget chat trực tuyến
 │       └── pages/
 │           ├── datasets.html   # Trang Layers
 │           ├── maps.html       # Trang Bản đồ
 │           └── documents.html  # Trang Tài liệu
-├── docker-compose.override.yml # Mount giao diện vào container GeoNode
+├── geonode/
+│   └── chat/                   # Django app "chat" (backend cho chatbox)
+├── docker-compose.override.yml # Mount giao diện + chat app vào container
 └── README.md
 ```
 
@@ -31,21 +36,33 @@ webgis-custom/
 
 Yêu cầu: đã có source GeoNode (bản 4.x) + Docker Desktop.
 
-1. Clone GeoNode và checkout đúng bản đang dùng, sau đó copy giao diện vào:
+1. Clone GeoNode và checkout đúng bản đang dùng, sau đó copy giao diện + chat app vào:
    ```powershell
    Copy-Item -Recurse .\templates\ <duong-dan-geonode>\templates\
+   Copy-Item -Recurse .\geonode\chat\ <duong-dan-geonode>\geonode\chat\
    Copy-Item .\docker-compose.override.yml <duong-dan-geonode>\docker-compose.override.yml
    ```
-2. Khởi động GeoNode:
+2. Đăng ký app `chat` vào backend (chỉ cần 2 dòng):
+   - `geonode/settings.py` — cuối file thêm:
+     ```python
+     INSTALLED_APPS += ("geonode.chat",)
+     ```
+   - `geonode/urls.py` — cuối file (trước `handler500`) thêm:
+     ```python
+     urlpatterns += [re_path(r"^api/v2/chat/", include("geonode.chat.urls"))]
+     ```
+3. Khởi động GeoNode:
    ```powershell
    cd <duong-dan-geonode>
    docker compose up -d
+   docker compose exec django python manage.py migrate   # tạo bảng chat
    docker compose restart django
    ```
-3. Mở trình duyệt: `http://localhost` (nhấn `Ctrl+F5` nếu vẫn thấy giao diện cũ do cache).
+4. Mở trình duyệt: `http://localhost` (nhấn `Ctrl+F5` nếu vẫn thấy giao diện cũ do cache).
 
 ## Ghi chú
 
-- Giao diện chỉ đọc API có sẵn của GeoNode (`/api/v2/datasets`, `/api/v2/maps`, `/api/v2/documents`), không sửa backend.
+- Giao diện chỉ đọc API có sẵn của GeoNode (`/api/v2/datasets`, `/api/v2/maps`, `/api/v2/documents`), không sửa backend ngoài app chat nhỏ.
+- Chatbox dùng API riêng: `GET /api/v2/chat/messages/` (đọc tin mới nhất, mặc định 50) và `POST /api/v2/chat/send/` (gửi tin nhắn).
 - Dữ liệu mẫu (bản đồ, tài liệu demo) nằm trong database Docker, không đi kèm repo này.
 - Phát triển trên nền GeoNode (GPL-3.0).

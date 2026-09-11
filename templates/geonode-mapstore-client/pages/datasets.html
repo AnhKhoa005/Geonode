@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -275,7 +275,7 @@
     .then(r=>r.json())
     .then(function(d){
       all = (d.datasets||[]).map(function(x){
-        let type='vector';
+        let type = (x.subtype==='raster') ? 'raster' : 'vector';
         if(x.sourcetype==='coverage'||x.sourcetype==='remote'){ type='raster'; }
         return Object.assign({}, x, { type: type });
       });
@@ -283,5 +283,6 @@
     })
     .catch(function(){ grid.innerHTML='<div class="col-12 text-center py-5 text-secondary"><i class="fa fa-exclamation-triangle fa-3x d-block mb-2" style="opacity:.4"></i>Không thể tải dữ liệu. Vui lòng thử lại.</div>'; });
 </script>
+{% include '../snippets/chatbox.html' %}
 </body>
 </html>
