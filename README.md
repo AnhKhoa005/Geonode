@@ -6,12 +6,13 @@
 
 ## Tính năng
 
-- **Trang chủ (phong cách Arsha)**: header cố định + menu mobile, hero xanh navy kèm ảnh minh họa và ô tìm kiếm, thống kê, 6 tính năng dạng Services, Layers nổi bật, khối CTA nền ảnh, footer Arsha. Khung bản đồ MapStore gốc giữ nguyên bên dưới.
+- **Trang chủ (phong cách Arsha)**: header cố định + menu mobile, hero xanh navy nhỏ gọn kèm ảnh minh họa và ô tìm kiếm, thống kê, 6 tính năng dạng Services (icon to, card đều nhau), Layers nổi bật, khối CTA nền ảnh, footer Arsha. Khung bản đồ MapStore gốc giữ nguyên bên dưới.
 - **Trang Layers** (`/datasets`): tìm kiếm, lọc Vector/Raster, sắp xếp (mới nhất, A-Z, phổ biến), badge loại layer, mở viewer chi tiết.
 - **Trang Bản đồ** (`/maps`): lưới card thumbnail, số layer, ngày tạo, lượt xem, tự tạo thumbnail từ WMS nếu thiếu.
 - **Trang Tài liệu** (`/documents`): icon theo định dạng file (PDF, Word, Excel...), badge đuôi file.
 - **Chat trực tuyến** (floating widget góc phải dưới): hộp chat lưu vào database, poll tin nhắn mới mỗi 5 giây (biến CSS tùy chỉnh `.gn-chat-*`), nhận diện tên người đăng nhập, khách lưu tên "Khách".
-- Style thống nhất: tông navy + xanh dương, font Be Vietnam Pro + Inter, hỗ trợ tiếng Việt đầy đủ.
+- **Thương hiệu GITC Portal**: thay nhãn "GeoNode" trên toàn bộ giao diện (navbar, title, footer, dropdown catalogue MapStore) thành "GITC Portal".
+- Style thống nhất: tông navy + xanh dương, font **Roboto** (đồng bộ 4 trang + chatbox), hỗ trợ tiếng Việt đầy đủ.
 
 ## Cấu trúc
 
@@ -53,7 +54,16 @@ Yêu cầu: đã có source GeoNode (bản 4.x) + Docker Desktop.
      ```python
      urlpatterns += [re_path(r"^api/v2/chat/", include("geonode.chat.urls"))]
      ```
-3. Khởi động GeoNode:
+3. (Tùy chọn) Đổi nhãn catalogue MapStore từ "GeoNode" thành "GITC Portal" — `geonode/settings.py` cuối file thêm:
+   ```python
+   MAPSTORE_CATALOGUE_SERVICES = {
+       "GITC Portal": {"type": "geonode", "url": None, "autoload": True, "title": "GITC Portal"}
+   }
+   MAPSTORE_CATALOGUE_SELECTED_SERVICE = "GITC Portal"
+   MAPSTORE_DASHBOARD_CATALOGUE_SERVICES = MAPSTORE_CATALOGUE_SERVICES
+   MAPSTORE_DASHBOARD_CATALOGUE_SELECTED_SERVICE = "GITC Portal"
+   ```
+4. Khởi động GeoNode:
    ```powershell
    cd <duong-dan-geonode>
    docker compose up -d
